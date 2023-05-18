@@ -15,4 +15,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT s from Student s WHERE s.firstName = ?1 AND s.age >= ?2")
     List<Student> findStudentsByFirstNameEqualsAndAgeGreaterThan(
             String name, Integer age);
+    @Query(
+            value = "SELECT * FROM student WHERE first_name = ?1 AND age >= ?2",
+            nativeQuery = true)
+    List<Student> findStudentsByFirstNameEqualsAndAgeEqualsNative(
+            String name, Integer age
+    );
 }
