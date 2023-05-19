@@ -2,7 +2,7 @@ package com.example.springdatajpa;
 
 import jakarta.persistence.*;
 
-@Entity("Student")
+@Entity(name = "StudentIdCard")
 @Table(
         name = "student_id_card",
         uniqueConstraints = {
