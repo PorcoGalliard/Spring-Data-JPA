@@ -1,11 +1,9 @@
 package com.example.springdatajpa;
 
-import com.github.javafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -19,33 +17,25 @@ public class SpringDataJpaApplication {
     @Bean
     CommandLineRunner commandLineRunner(StudentRepository studentRepository) {
         return args -> {
-            generateStudents(studentRepository);
-            Sort sort = Sort.by("firstName").ascending()
-                    .and(Sort.by("age").descending());
-            studentRepository
-                    .findAll(sort)
-                    .forEach(student -> System.out.println(
-                            student.getFirstName() +
-                            " " +
-                            student.getAge()));
+            Student Maria = new Student("Maria", "Jeanne", "mariajeanne@edu.com", 21);
+
+            Student Ahmed = new Student("Ahmed", "Ali", "ahmedali@edu.com", 21);
+
+            Student Ahmed2 = new Student("Ahmed", "Ali2", "ahmedali2@edu.com", 18);
+
+            System.out.println("Adding MARIA and AHMED");
+            studentRepository.saveAll(List.of(Maria, Ahmed, Ahmed2));
+
+            String email = "ahmedali@edu.com";
+            studentRepository.findStudentsByEmail(email).ifPresentOrElse(
+                    System.out::println, () -> {
+                        System.out.printf("Student with email %s doesn't exist", email);
+                    }
+            );
+
+            studentRepository.findStudentsByFirstNameEqualsAndAgeIsGreaterThanEqual("Ahmed", 10)
+                    .forEach(System.out::println);
+
         };
     }
-
-    private static void generateStudents(StudentRepository studentRepository) {
-        Faker faker = new Faker();
-        for (int i = 0; i < 20; i++) {
-            String firstName = faker.name().firstName();
-            String lastName = faker.name().lastName();
-            String email = String.format("%s.%s@amigoscode.edu", firstName, lastName);
-            int age = faker.number().numberBetween(17, 55);
-            Student student = new Student(
-                    firstName,
-                    lastName,
-                    email,
-                    age
-            );
-            studentRepository.save(student);
-        }
-    }
-
 }

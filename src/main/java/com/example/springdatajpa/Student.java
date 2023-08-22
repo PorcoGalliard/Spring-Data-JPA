@@ -2,11 +2,11 @@ package com.example.springdatajpa;
 
 import jakarta.persistence.*;
 
-import static jakarta.persistence.GenerationType.SEQUENCE;
+import static jakarta.persistence.GenerationType.*;
 
 @Entity(name = "Student")
 @Table(
-        name = "student",
+        name = "Student",
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "student_email_unique",
@@ -55,14 +55,14 @@ public class Student {
     )
     private Integer age;
 
+    public Student() {
+    }
+
     public Student(String firstName, String lastName, String email, Integer age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.age = age;
-    }
-
-    public Student() {
     }
 
     public Long getId() {
